@@ -4,7 +4,7 @@
 
 <div class="card col-md-6">
     <div class="card-body">
-        <form action="<?= base_url('admin/presence_location/update/'. $presence_location['id']) ?>" method="post">
+        <form action="<?= base_url('admin/presence_location/update/'. encode_id($presence_location['id'])) ?>" method="post">
             <div class="input-style-1">
                 <label>Name</label>
                 <input type="text" value="<?= $presence_location['name'] ?>" class="form-control <?= $validation->hasError('name') ? 'is-invalid' : '' ?>" name="name" placeholder="Name" />

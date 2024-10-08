@@ -12,14 +12,21 @@ class PresenceLocationController extends BaseController
     private $route      = 'admin/presence_location';
     private $pagetitle  = 'Presence Location';
     private $namespace  = 'admin/presence_locations';
+    private $modelName  = PresenceLocation::class;
+
+    protected $model; // Property untuk menyimpan instance model
+
+    public function __construct()
+    {
+        // parent::__construct(); // Memanggil constructor parent
+        $this->model = new $this->modelName; // Menginisialisasi model
+    }
 
     public function index()
     {
-        $presence_location = new PresenceLocation();
-
         $data = [
             'title'                 => $this->pagetitle,
-            'presence_locations'    => $presence_location->findAll()
+            'presence_locations'    => $this->model->findAll()
         ];
 
         return view($this->namespace.'/index', $data);
@@ -104,8 +111,7 @@ class PresenceLocationController extends BaseController
 
             echo view($this->namespace.'/create', $data);
         }else{
-            $presence_location = new PresenceLocation();
-            $presence_location->insert([
+            $this->model->insert([
                 'name' => $this->request->getPost('name'),
                 'address' => $this->request->getPost('address'),
                 'tipe' => $this->request->getPost('tipe'),
@@ -125,13 +131,13 @@ class PresenceLocationController extends BaseController
 
     public function edit($id)
     {
-        $presence_location = new PresenceLocation();
+        $decodeId = decode_id($id)[0];
 
         $data = [
             'title'                 => 'Edit '.$this->pagetitle,
             'validation'            => Services::validation(),
             'route_back'            => base_url($this->route),
-            'presence_location'     => $presence_location->find($id),
+            'presence_location'     => $this->model->find($decodeId),
         ];
 
         return view($this->namespace.'/edit', $data);
@@ -139,7 +145,7 @@ class PresenceLocationController extends BaseController
 
     public function update($id)
     {
-        $presence_location = new PresenceLocation();
+        $decodeId = decode_id($id)[0];
 
         $rules = [
             'name' => [
@@ -200,16 +206,15 @@ class PresenceLocationController extends BaseController
 
         if(!$this->validate($rules)){
             $data = [
-                'title'         => 'Edit '.$this->pagetitle,
-                'validation'    => Services::validation(),
-                'department'    => $presence_location->find($id),
-                'route_back'    => base_url($this->route)
+                'title'                 => 'Edit '.$this->pagetitle,
+                'validation'            => Services::validation(),
+                'presence_location'     => $this->model->find($decodeId),
+                'route_back'            => base_url($this->route)
             ];
 
             echo view($this->namespace.'/edit', $data);
         }else{
-            $presence_location = new PresenceLocation();
-            $presence_location->update($id, [
+            $this->model->update($id, [
                 'name' => $this->request->getPost('name'),
                 'address' => $this->request->getPost('address'),
                 'tipe' => $this->request->getPost('tipe'),
@@ -229,11 +234,11 @@ class PresenceLocationController extends BaseController
 
     public function delete($id)
     {
-        $presenceLocation = new PresenceLocation();
+        $decodeId = decode_id($id)[0];
 
-        $presence_location = $presenceLocation->find($id);
+        $presence_location = $this->model->find($decodeId);
         if($presence_location){
-            $presenceLocation->delete($id);
+            $this->model->delete($decodeId);
             session()->setFlashdata('success', 'Data has ben deleted');
 
             return redirect()->to(base_url($this->route));
@@ -242,12 +247,12 @@ class PresenceLocationController extends BaseController
 
     public function detail($id)
     {
-        $presence_location = new PresenceLocation();
+        $decodeId = decode_id($id)[0];
 
         $data = [
             'title'             => 'Detail '.$this->pagetitle,
             'route_back'        => base_url($this->route),
-            'presence_location' => $presence_location->find($id)
+            'presence_location' => $this->model->find($decodeId)
         ];
 
         return view($this->namespace.'/detail', $data);

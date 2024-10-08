@@ -4,7 +4,7 @@
 
 <div class="card col-md-6">
     <div class="card-body">
-        <form action="<?= base_url('admin/department/update/'.$department['id']) ?>" method="post">
+        <form action="<?= base_url('admin/department/update/'.encode_id($department['id'])) ?>" method="post">
             <div class="input-style-1">
                 <label>Department</label>
                 <input type="text" class="form-control <?= $validation->hasError('department') ? 'is-invalid' : '' ?>" name="department" value="<?= $department['department'] ?>" placeholder="Department" />

@@ -9,17 +9,24 @@ use Config\Services;
 
 class DepartmentController extends BaseController
 {
-    private $route      = 'admin/department/';
+    private $route      = 'admin/department';
     private $pagetitle  = 'Department';
     private $namespace  = 'admin/departments';
+    private $modelName  = Department::class;
+
+    protected $model; // Property untuk menyimpan instance model
+
+    public function __construct()
+    {
+        // parent::__construct(); // Memanggil constructor parent
+        $this->model = new $this->modelName; // Menginisialisasi model
+    }
 
     public function index()
     {
-        $deparment = new Department();
-
         $data = [
             'title'         => $this->pagetitle,
-            'departments'   => $deparment->findAll()
+            'departments'   => $this->model->findAll()
         ];
 
         return view($this->namespace.'/index', $data);
@@ -56,8 +63,7 @@ class DepartmentController extends BaseController
 
             echo view($this->namespace.'/create', $data);
         }else{
-            $department = new Department();
-            $department->insert([
+            $this->model->insert([
                 'department' => $this->request->getPost('department')
             ]);
 
@@ -69,13 +75,13 @@ class DepartmentController extends BaseController
 
     public function edit($id)
     {
-        $department = new Department();
+        $decodeId = decode_id($id)[0];
 
         $data = [
             'title'         => 'Edit '.$this->pagetitle,
             'validation'    => Services::validation(),
             'route_back'    => base_url($this->route),
-            'department'    => $department->find($id),
+            'department'    => $this->model->find($decodeId),
         ];
 
         return view($this->namespace.'/edit', $data);
@@ -83,7 +89,7 @@ class DepartmentController extends BaseController
 
     public function update($id)
     {
-        $department = new Department();
+        $decodeId = decode_id($id)[0];
 
         $rules = [
             'department' => [
@@ -98,14 +104,13 @@ class DepartmentController extends BaseController
             $data = [
                 'title'         => 'Edit '.$this->pagetitle,
                 'validation'    => Services::validation(),
-                'department'    => $department->find($id),
+                'department'    => $this->model->find($decodeId),
                 'route_back'    => base_url($this->route)
             ];
 
             echo view($this->namespace.'/edit', $data);
         }else{
-            $department = new Department();
-            $department->update($id, [
+            $this->model->update($decodeId, [
                 'department' => $this->request->getPost('department')
             ]);
 
@@ -117,11 +122,11 @@ class DepartmentController extends BaseController
 
     public function delete($id)
     {
-        $departmentModel = new Department();
+        $decodeId = decode_id($id)[0];
 
-        $department = $departmentModel->find($id);
+        $department = $this->model->find($decodeId);
         if($department){
-            $departmentModel->delete($id);
+            $this->model->delete($decodeId);
             session()->setFlashdata('success', 'Data has ben deleted');
 
             return redirect()->to(base_url($this->route));

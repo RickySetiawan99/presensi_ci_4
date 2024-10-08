@@ -33,9 +33,9 @@
                 <td><?=  $presence_location['clock_in'] ?></td>
                 <td><?=  $presence_location['clock_out'] ?></td>
                 <td>
-                    <a href="<?= base_url('admin/presence_location/detail/'.$presence_location['id']) ?>" class="badge bg-info">detail</a>
-                    <a href="<?= base_url('admin/presence_location/edit/'.$presence_location['id']) ?>" class="badge bg-primary">Edit</a>
-                    <a href="<?= base_url('admin/presence_location/delete/'.$presence_location['id']) ?>" class="badge bg-danger delete-button">Delete</a>
+                    <a href="<?= base_url('admin/presence_location/detail/'.encode_id($presence_location['id'])) ?>" class="badge bg-info">detail</a>
+                    <a href="<?= base_url('admin/presence_location/edit/'.encode_id($presence_location['id'])) ?>" class="badge bg-primary">Edit</a>
+                    <a href="<?= base_url('admin/presence_location/delete/'.encode_id($presence_location['id'])) ?>" class="badge bg-danger delete-button">Delete</a>
                 </td>
             </tr>
         <?php endforeach; ?>

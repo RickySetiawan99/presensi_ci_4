@@ -23,8 +23,8 @@
                 <td><?=  $no++ ?></td>
                 <td><?=  $department['department'] ?></td>
                 <td>
-                    <a href="<?= base_url('admin/department/edit/'.$department['id']) ?>" class="badge bg-primary">Edit</a>
-                    <a href="<?= base_url('admin/department/delete/'.$department['id']) ?>" class="badge bg-danger delete-button">Delete</a>
+                    <a href="<?= base_url('admin/department/edit/'.encode_id($department['id'])) ?>" class="badge bg-primary">Edit</a>
+                    <a href="<?= base_url('admin/department/delete/'.encode_id($department['id'])) ?>" class="badge bg-danger delete-button">Delete</a>
                 </td>
             </tr>
         <?php endforeach; ?>
